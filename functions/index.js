@@ -1,5 +1,4 @@
-﻿/*
-import { getAssetFromKV } from '@cloudflare/kv-asset-handler';
+﻿import { getAssetFromKV } from '@cloudflare/kv-asset-handler';
 
 export default {
     async fetch(request, env, ctx) {
@@ -7,7 +6,7 @@ export default {
 
         // Redirect "/" → "/420clock.html"
         if (url.pathname === "/" || url.pathname === "") {
-            url.pathname = "/420clock.html";
+            url.pathname = "/html/420clock.html";
             request = new Request(url, request);
         }
 
