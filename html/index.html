@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>420 Clock</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png">
+
+</head>
+<body class="body_clock">
+    <div id="debug-container" style="display:block">
+        <label><input type="checkbox" id="debug420"> Force 4:20 Mode</label>
+        <label><input type="checkbox" id="debugFriday"> Is it Friday?</label>
+    </div>
+
+    <div id="audio-container">
+        <audio id="audio420" src="../snd/smokeweedeveryday_og.mp3" preload="auto"></audio>
+        <audio id="audio420friday" src="../snd/smokeweedeveryday_remix.mp3" preload="auto"></audio>
+        <audio id="silentButDeadly" src="../snd/silence.mp3" preload="auto"></audio>
+    </div>
+
+    <div id="audioPrompt">
+        🔊 Click anywhere to enable sound! 🔊
+    </div>
+
+    <div id="clock">
+        Loading...
+    </div>
+
+    <script id="420clockScript">
+        const clock = document.getElementById('clock');
+        const audioPrompt = document.getElementById('audioPrompt');
+        const debugCheckbox = document.getElementById('debug420');           // Force 420 mode
+        const debugFridayCheckbox = document.getElementById('debugFriday');  // Force Friday
+        // Fixes bug where UnlockAudioOnce stops the music if 420 mode is already active.
+
+        const silentAudio = document.getElementById('silentButDeadly');
+        const audio420 = document.getElementById('audio420');
+        const audio420friday = document.getElementById('audio420friday');
+        let flashing = false;
+        let flashInterval = null;
+        let leafInterval = null;
+        const leafImage = '../img/weedleaf.png';
+
+        document.addEventListener("mouseenter", unlockAudioOnce, { once: true });
+        document.addEventListener("click", unlockAudioOnce, { once: true });
+
+        function unlockAudioOnce() {
+            silentAudio.play().then(() => {
+                silentAudio.pause();
+                silentAudio.currentTime = 0;
+                console.log("Attempting to unlock audio silently.");
+                audioPrompt.style.display = 'none';
+            }).catch((err) => {
+                console.warn("Audio Still Blocked:", err);
+            });
+        }
+
+        function spawnLeaf() {
+            const leaf = document.createElement('img');
+            leaf.src = leafImage;
+            leaf.className = 'leaf';
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+            document.body.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 6000);
+        }
+
+        function enter420Mode(isFriday) {
+            if (!flashing) {
+                flashing = true;
+                if (isFriday) {
+                    audio420friday.play().catch(() => { });
+                } else {
+                    audio420.play().catch(() => { });
+                }
+                flashInterval = setInterval(() => {
+                    document.body.style.backgroundColor =
+                        document.body.style.backgroundColor === 'black' ? '#00ff00' : 'black';
+                    clock.style.color = document.body.style.backgroundColor === 'black' ? 'white' : 'black';
+                }, 500);
+                leafInterval = setInterval(spawnLeaf, 300);
+            }
+            clock.textContent = 'HAPPY 4:20!!!';
+        }
+
+        function exit420Mode(isFriday) {
+            if (flashing) {
+                flashing = false;
+                if (isFriday) {
+                    audio420friday.pause();
+                    audio420friday.currentTime = 0;
+                } else {
+                    audio420.pause();
+                    audio420.currentTime = 0;
+                }
+                clearInterval(flashInterval);
+                clearInterval(leafInterval);
+                document.body.style.backgroundColor = 'black';
+                clock.style.color = 'white';
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+
+            // check Friday status (real or debug-forced)
+            const debugForceTodayToBeFriday = debugFridayCheckbox?.checked || false;
+            const isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
+
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const isPM = hours >= 12;
+
+            const in420Window =
+                ((hours === 4 || hours === 16) &&
+                    ((minutes === 20 && seconds < 60) ||
+                        (minutes === 22 && seconds < 60)));
+
+            const isForced = debugCheckbox?.checked || false;
+
+            if (isForced || in420Window) {
+                enter420Mode(isFriday);
+            } else {
+                exit420Mode(isFriday);
+                const displayHours = hours % 12 || 12;
+                const timeStr = `${displayHours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${isPM ? 'PM' : 'AM'}`;
+                clock.textContent = timeStr;
+            }
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
