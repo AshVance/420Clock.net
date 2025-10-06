@@ -11,10 +11,11 @@
 
 </head>
 <body class="body_clock">
-    <div id="debug-container" style="display:none">
-        <p>DEBUG CONTROLS</p>
-        <label><input type="checkbox" id="debug420"> Force 4:20 Mode</label>
-        <label><input type="checkbox" id="debugFriday"> Is it Friday?</label>
+    <div id="debug-container" style="display:block; color:white; background-color:darkgreen">
+        <p>//DEBUG CONTROLS//</p>
+        <label><input type="checkbox" id="debug420"> //Force 4:20 Mode</label><br />
+        <label><input type="checkbox" id="debug422"> //Force 4:22 Flag</label><br />
+        <label><input type="checkbox" id="debugFriday"> //Is it Friday?</label><br />
     </div>
 
     <div id="audio-container">
@@ -23,31 +24,55 @@
         <audio id="silentButDeadly" src="snd/silence.mp3" preload="auto"></audio>
     </div>
 
+    <div id="clock">
+        Loading...
+    </div>
+
     <div id="audioPrompt">
         <h6>🔊 Click anywhere to enable sound! 🔊</h6>
     </div>
 
-    <div id="clock">
-        Loading...
-    </div>
-    
     <script id="420clockScript">
+        // UI elements
         const clock = document.getElementById('clock');
         const audioPrompt = document.getElementById('audioPrompt');
         const debugCheckbox = document.getElementById('debug420');           // Force 420 mode
         const debugFridayCheckbox = document.getElementById('debugFriday');  // Force Friday
-        // Fixes bug where UnlockAudioOnce stops the music if 420 mode is already active.
+        const debug422Checkbox = document.getElementById('debug422');
 
+        // Audio elements
+        // Silent audio added to fix bug where UnlockAudioOnce() stops the music if 420 mode is already active.
         const silentAudio = document.getElementById('silentButDeadly');
         const audio420 = document.getElementById('audio420');
         const audio420friday = document.getElementById('audio420friday');
+
+        // 420 mode variables
         let flashing = false;
         let flashInterval = null;
         let leafInterval = null;
         const leafImage = 'img/weedleaf.png';
 
+        // Debug variables
+        let debugForce420Mode = false;
+        let debugForceTodayToBeFriday = false;
+        let debugForce422FlagTrue = false;
+        // Add event listeners to unlock audio on user interaction
         document.addEventListener("mouseenter", unlockAudioOnce, { once: true });
         document.addEventListener("click", unlockAudioOnce, { once: true });
+
+        // Initialize time variables
+        let now;
+        let hours;
+        let minutes;
+        let seconds;
+        let isFriday;
+        let is422;
+        let isPM;
+        let in420Window;
+
+        // Clock display variables
+        let displayHours;
+        let timeStr;
 
         function unlockAudioOnce() {
             silentAudio.play().then(() => {
@@ -68,7 +93,7 @@
             leaf.style.animationDuration = (Math.random() * 3 + 3) + 's';
             leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
             document.body.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 6000);
+            setTimeout(() => leaf.remove(), 10000);
         }
 
         function enter420Mode(isFriday) {
@@ -86,7 +111,15 @@
                 }, 500);
                 leafInterval = setInterval(spawnLeaf, 300);
             }
-            clock.textContent = 'HAPPY 4:20!!!';
+            const is422 = ((hours === 4 && minutes === 22) || (debugForce422FlagTrue));
+            if (!is422)
+            {
+                clock.textContent = 'HAPPY 4:20!!!';
+            }
+            else if (is422)
+            {
+                clock.textContent = 'HAPPY 4:22!!!';
+            }
         }
 
         function exit420Mode(isFriday) {
@@ -107,34 +140,34 @@
         }
 
         function updateClock() {
-            const now = new Date();
+            now = new Date();
+            debugForceTodayToBeFriday = debugFridayCheckbox?.checked || false;
+            debugForce422FlagTrue = debug422Checkbox?.checked || false;
 
-            // check Friday status (real or debug-forced)
-            const debugForceTodayToBeFriday = debugFridayCheckbox?.checked || false;
-            const isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
+            isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
 
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            const isPM = hours >= 12;
+            hours = now.getHours();
+            minutes = now.getMinutes();
+            seconds = now.getSeconds();
 
-            const in420Window =
+            is422 = (minutes === 22) || debugForce422FlagTrue;
+            isPM = hours >= 12;
+            in420Window =
                 ((hours === 4 || hours === 16) &&
                     ((minutes === 20 && seconds < 60) ||
                         (minutes === 22 && seconds < 60)));
 
-            const isForced = debugCheckbox?.checked || false;
+            debugForce420Mode = debugCheckbox?.checked || false;
 
-            if (isForced || in420Window) {
+            if (debugForce420Mode || in420Window) {
                 enter420Mode(isFriday);
             } else {
                 exit420Mode(isFriday);
-                const displayHours = hours % 12 || 12;
-                const timeStr = `${displayHours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${isPM ? 'PM' : 'AM'}`;
+                displayHours = hours % 12 || 12;
+                timeStr = `${displayHours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${isPM ? 'PM' : 'AM'}`;
                 clock.textContent = timeStr;
             }
         }
-
         setInterval(updateClock, 1000);
         updateClock();
     </script>

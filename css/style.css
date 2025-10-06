@@ -2,6 +2,7 @@
    420Clock Stylesheet
    Extracted and formatted for external CSS
 ======================================= */
+/*Style Data First*/
 
 /* --- Base Layout --- */
 body.body_main {
@@ -18,7 +19,7 @@ body.body_main {
     transition: background-color 0.3s, color 0.3s;
     overflow: auto;
 }
-
+/* --- Clock Layout --- */
 body.body_clock {
     margin: 0;
     display: flex;
@@ -49,11 +50,25 @@ label {
 /* --- Falling Leaves --- */
 .leaf {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 69px;
+    height: 69px;
     pointer-events: none;
     animation: fall 5s linear infinite, spin 4s linear infinite;
 }
+
+/* --- Audio Prompt --- */
+#audioPrompt {
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        color: #ccc;
+    }
+
+.flash-text {
+        color: #00ff00;
+        animation: flash 3s infinite;
+    }
 
 /* --- Animations --- */
 @keyframes fall {
@@ -78,11 +93,12 @@ label {
     }
 }
 
-/* --- Audio Prompt --- */
-#audioPrompt {
-    position: fixed;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color: #ccc;
+@keyframes flash {
+    from {
+        color: #00ff00; /* bright green */
+    }
+
+    to {
+        color: #008000; /* darker green */
+    }
 }
