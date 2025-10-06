@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>420 Clock</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="manifest" href="../site.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="img/android-chrome-512x512.png">
 
 </head>
 <body class="body_clock">
@@ -17,9 +17,9 @@
     </div>
 
     <div id="audio-container">
-        <audio id="audio420" src="../snd/smokeweedeveryday_og.mp3" preload="auto"></audio>
-        <audio id="audio420friday" src="../snd/smokeweedeveryday_remix.mp3" preload="auto"></audio>
-        <audio id="silentButDeadly" src="../snd/silence.mp3" preload="auto"></audio>
+        <audio id="audio420" src="snd/smokeweedeveryday_og.mp3" preload="auto"></audio>
+        <audio id="audio420friday" src="snd/smokeweedeveryday_remix.mp3" preload="auto"></audio>
+        <audio id="silentButDeadly" src="snd/silence.mp3" preload="auto"></audio>
     </div>
 
     <div id="audioPrompt">
@@ -43,7 +43,7 @@
         let flashing = false;
         let flashInterval = null;
         let leafInterval = null;
-        const leafImage = '../img/weedleaf.png';
+        const leafImage = 'img/weedleaf.png';
 
         document.addEventListener("mouseenter", unlockAudioOnce, { once: true });
         document.addEventListener("click", unlockAudioOnce, { once: true });
