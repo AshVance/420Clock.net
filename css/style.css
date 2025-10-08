@@ -1,6 +1,5 @@
 /* =======================================
    420Clock Stylesheet
-   Extracted and formatted for external CSS
 ======================================= */
 /*Style Data First*/
 
@@ -148,26 +147,26 @@ label
 {
     body.body_main 
     {
-        font-size: .5rem;
+        font-size: 2rem;
     }
     body.body_clock {
-        font-size: .5rem;
+        font-size: 2rem;
     }
     .navpanel-container 
     {
-        font-size: .5rem;
+        font-size: 2rem;
     }
 }
 @media screen and (min-width: 481px) {
     body.body_main {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 
     body.body_clock {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     .navpanel-container {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 }
 @media screen and (min-width: 641px) {
