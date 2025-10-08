@@ -18,6 +18,7 @@ window.initMenu = function initMenu()
     else
     {
         debugClockPanelToggle.style.display = 'none';
+        debugPanel.style.display = 'none';
         console.log('Debug mode is OFF');
     }
 }
