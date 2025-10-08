@@ -11,13 +11,13 @@ body.body_main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /*height: 100vh;*/
     background-color: black;
     color: white;
     font-family: sans-serif;
     font-size: 2.5rem;
     transition: background-color 0.3s, color 0.3s;
     overflow: auto;
+    text-decoration: none;
 }
 /* --- Clock Layout --- */
 body.body_clock {
@@ -30,25 +30,37 @@ body.body_clock {
     background-color: black;
     color: white;
     font-family: sans-serif;
-    font-size: 5rem;
+    font-size: 6rem;
     transition: background-color 0.3s, color 0.3s;
     overflow: hidden;
+    text-decoration: none;
 }
 
 /* --- Debug Panel --- */
-#debug-container {
+#debug-container 
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1rem;
+}
+.navpanel-container {
     position: absolute;
     top: 10px;
     left: 10px;
-    font-size: 1rem;
+    color: green;
+    font-family: sans-serif;
+    font-size: 2rem;
+    text-decoration: none;
 }
-
-label {
+label 
+{
     user-select: none;
 }
 
 /* --- Falling Leaves --- */
-.leaf {
+.leaf 
+{
     position: absolute;
     width: 69px;
     height: 69px;
@@ -57,7 +69,8 @@ label {
 }
 
 /* --- Audio Prompt --- */
-#audioPrompt {
+#audioPrompt 
+{
         position: fixed;
         bottom: 10px;
         width: 100%;
@@ -66,9 +79,8 @@ label {
     }
 
 .flash-text {
-        color: #00ff00;
-        animation: flash 3s infinite;
-    }
+    animation: flash_in 1s infinite alternate, flash_out 1s infinite alternate;
+}
 
 /* --- Animations --- */
 @keyframes fall {
@@ -93,12 +105,128 @@ label {
     }
 }
 
-@keyframes flash {
+@keyframes flash_in {
+    from {
+        color: #008000; /* darker green */
+    }
+
+    to {
+        color: #00ff00; /* bright green */
+    }
+
+}
+
+@keyframes flash_out {
     from {
         color: #00ff00; /* bright green */
     }
 
     to {
-        color: #008000; /* darker green */
+        color: #002000; /* darker green */
+    }
+}
+
+@keyframes flash_text_with_bg {
+    0% {
+        background-color: black;
+        color: white;
+    }
+
+    50% {
+        background-color: #00ff00;
+        color: black;
+    }
+
+    100% {
+        background-color: black;
+        color: white;
+    }
+}
+/* --- Media Queries --- */
+/* --- Mobile Fixes ---*/
+@media screen and (min-width: 320px) 
+{
+    body.body_main 
+    {
+        font-size: .5rem;
+    }
+    body.body_clock {
+        font-size: .5rem;
+    }
+    .navpanel-container 
+    {
+        font-size: .5rem;
+    }
+}
+@media screen and (min-width: 481px) {
+    body.body_main {
+        font-size: 1.5rem;
+    }
+
+    body.body_clock {
+        font-size: 1.5rem;
+    }
+    .navpanel-container {
+        font-size: 1.5rem;
+    }
+}
+@media screen and (min-width: 641px) {
+    body.body_main {
+        font-size: 2rem;
+    }
+
+    body.body_clock {
+        font-size: 2rem;
+    }
+    .navpanel-container {
+        font-size: 1rem;
+    }
+}
+@media screen and (min-width: 961px) {
+    body.body_main {
+        font-size: 2.5rem;
+    }
+
+    body.body_clock {
+        font-size: 2.5rem;
+    }
+    .navpanel-container {
+        font-size: 1.5rem;
+    }
+}
+@media screen and (min-width: 1025px) {
+    body.body_main {
+        font-size: 3rem;
+    }
+
+    body.body_clock {
+        font-size: 4rem;
+    }
+    .navpanel-container {
+        font-size: 2rem;
+    }
+}
+@media screen and (min-width: 1281px) {
+    body.body_main {
+        font-size: 4rem;
+    }
+
+    body.body_clock {
+        font-size: 4rem;
+    }
+    .navpanel-container {
+        font-size: 2rem;
+    }
+}
+@media screen and (min-width: 2100px) {
+    body.body_main {
+        font-size: 6rem;
+    }
+
+    body.body_clock {
+        font-size: 6rem;
+    }
+    .navpanel-container {
+        font-size: 3rem;
     }
 }
