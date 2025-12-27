@@ -77,6 +77,7 @@ function enter420Mode(isFriday) {
         }, 500);
         leafInterval = setInterval(spawnLeaf, 300);
     }
+    is422 = (hours === 4 && minutes === 22) || debugForce422FlagTrue;
     if (!is422) {
         clock.textContent = 'HAPPY 4:20!!!';
     }
@@ -106,6 +107,7 @@ function updateClock() {
     now = new Date();
     debugForceTodayToBeFriday = debugFridayCheckbox?.checked || false;
     debugForce422FlagTrue = debug422Checkbox?.checked || false;
+    debugForce420Mode = debugCheckbox?.checked || false;
 
     isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
 
@@ -120,7 +122,6 @@ function updateClock() {
             ((minutes === 20 && seconds < 60) ||
                 (minutes === 22 && seconds < 60)));
 
-    debugForce420Mode = debugCheckbox?.checked || false;
 
     if (debugForce420Mode || in420Window) {
         enter420Mode(isFriday);
