@@ -86,3 +86,6 @@ echo ✅ Done! Zipped Deployment Package created:
 echo    %ZIPNAME%
 echo	Uncompressed folder available at:
 echo 	%OUTPUTROOT%
+echo.
+pause
+exit
