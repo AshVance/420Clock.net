@@ -119,8 +119,6 @@ function updateClock() {
     //minutes = 22;
     //seconds = now.getSeconds();
 
-    // GITHUB DEMONSTRATION FOR PUPPY!!!!
-
     isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
     is422 = (hours === 4 && minutes === 22 && seconds < 60) || debugForce422FlagTrue;
     isPM = hours >= 12;
