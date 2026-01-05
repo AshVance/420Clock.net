@@ -3,7 +3,7 @@ const clock = document.getElementById('clock');
 const audioPrompt = document.getElementById('audioPrompt');
 const debugCheckbox = document.getElementById('debug420');           // Force 420 mode
 const debugFridayCheckbox = document.getElementById('debugFriday');  // Force Friday
-const debug422Checkbox = document.getElementById('debug422');
+const debug422Checkbox = document.getElementById('debug422');        // Force 4:22
 
 // Audio elements
 // Silent audio added to fix bug where UnlockAudioOnce() stops the music if 420 mode is already active.
@@ -31,6 +31,7 @@ let now;
 let hours;
 let minutes;
 let seconds;
+
 let isFriday;
 let is422;
 let isPM;
@@ -62,7 +63,7 @@ function spawnLeaf() {
     setTimeout(() => leaf.remove(), 10000);
 }
 
-function enter420Mode(isFriday) {
+function enter420Mode(isFriday, is422) {
     if (!flashing) {
         flashing = true;
         if (isFriday) {
@@ -77,13 +78,7 @@ function enter420Mode(isFriday) {
         }, 500);
         leafInterval = setInterval(spawnLeaf, 300);
     }
-    is422 = ((hours === 4 && minutes === 22) || debugForce422FlagTrue);
-    if (is422) {
-        clock.textContent = 'HAPPY 4:22!!!';
-    }
-    else if (!is422) {
-        clock.textContent = 'HAPPY 4:20!!!';
-    }
+    clock.textContent = is422 ? 'HAPPY 4:22!!!' : 'HAPPY 4:20!!!';
 }
 
 function exit420Mode(isFriday) {
@@ -104,24 +99,19 @@ function exit420Mode(isFriday) {
 }
 
 function updateClock() {
-    now = new Date();
     debugForceTodayToBeFriday = debugFridayCheckbox?.checked || false;
     debugForce422FlagTrue = debug422Checkbox?.checked || false;
     debugForce420Mode = debugCheckbox?.checked || false;
 
-    // real functions
+    now = new Date();
     hours = now.getHours();
     minutes = now.getMinutes();
     seconds = now.getSeconds();
-
-    // temp debug test for 4:22 debugging (making SURE it works this time)
-    //hours = 4;
-    //minutes = 22;
-    //seconds = now.getSeconds();
+    isPM = hours >= 12;
 
     isFriday = (now.getDay() === 5) || debugForceTodayToBeFriday;
-    is422 = (hours === 4 && minutes === 22 && seconds < 60) || debugForce422FlagTrue;
-    isPM = hours >= 12;
+    is422 = (hours === 4 && minutes === 22) || debugForce422FlagTrue;
+
     in420Window =
         ((hours === 4 || hours === 16) &&
             ((minutes === 20 && seconds < 60) ||
@@ -129,7 +119,7 @@ function updateClock() {
 
 
     if (debugForce420Mode || in420Window) {
-        enter420Mode(isFriday);
+        enter420Mode(isFriday, is422);
     } else {
         exit420Mode(isFriday);
         displayHours = hours % 12 || 12;
